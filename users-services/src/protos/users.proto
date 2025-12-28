@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package users;
+
+service UsersService {
+    rpc GetAllUsers(GetAllUsersRequest) returns (GetAllUsersResponse);
+    rpc GetUser(email) returns (User);
+    rpc addUser(User) returns (User);
+    rpc deleteUser(email) returns (idUser);
+    rpc addClient(createuser) returns (User);
+}
+
+message createuser{
+    int32 numIdentite = 1;
+    string nom = 2;
+    string prenom = 3;
+    string email = 4;
+    string mdp = 5;
+    string adresse = 6;
+    int32 numTel = 7;
+    int32 partner=9;
+    int32 dependents=10;
+}
+
+// Message pour récupérer tous les utilisateurs
+message GetAllUsersRequest {}
+
+message GetAllUsersResponse {
+    repeated User users = 1;  // Liste des utilisateurs
+}
+
+// Message pour une seule demande d'utilisateur
+message email {
+    string email= 1;
+}
+
+message User {
+    int32 numIdentite = 1;
+    string nom = 2;
+    string prenom = 3;
+    string email = 4;
+    string mdp = 5;
+    string adresse = 6;
+    int32 numTel = 7;
+    string role=8;
+    int32 partner=9;
+    int32 dependents=10;
+}
+
+
+message idUser {
+    int32 numIdentite = 1;
+}

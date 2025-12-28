@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: String!
+  numIdentite: Float!
+  nom: String!
+  prenom: String!
+  email: String!
+  mdp: String!
+  adresse: String!
+  numTel: Float!
+  role: String!
+}
+
+type deleteUserResponse {
+  status: String!
+  message: String!
+}
+
+type LoginResponse {
+  token: String!
+}
+
+type PredictionValue {
+  prediction: Float!
+}
+
+type Query {
+  GetAllUsers: [User!]!
+}
+
+type Mutation {
+  addClient(params: createclientInput!): User!
+  addUser(params: createUserInput!): User!
+  delete(params: deleteUser!): deleteUserResponse!
+  login(params: loginInput!): LoginResponse!
+  predictChurn(contratInput: ChurnInput!, userInput: featuresPredUser!): PredictionValue!
+}
+
+input createclientInput {
+  numIdentite: Float!
+  nom: String!
+  prenom: String!
+  email: String!
+  mdp: String!
+  adresse: String!
+  numTel: Float!
+  partner: Float!
+  Dependents: Float!
+}
+
+input createUserInput {
+  numIdentite: Float!
+  nom: String!
+  prenom: String!
+  email: String!
+  mdp: String!
+  adresse: String!
+  numTel: Float!
+  role: String!
+  partner: Float!
+  Dependents: Float!
+}
+
+input deleteUser {
+  email: String!
+}
+
+input loginInput {
+  username: String!
+  password: String!
+}
+
+input ChurnInput {
+  tenure: Float!
+  PhoneService: Float!
+  MultipleLines: Float!
+  InternetService: Float!
+  OnlineSecurity: Float!
+  OnlineBackup: Float!
+  DeviceProtection: Float!
+  TechSupport: Float!
+  StreamingTV: Float!
+  StreamingMovies: Float!
+  Contract: Float!
+  PaperlessBilling: Float!
+  PaymentMethod: Float!
+  MonthlyCharges: Float!
+  TotalCharges: Float!
+}
+
+input featuresPredUser {
+  partner: Float!
+  Dependents: Float!
+}

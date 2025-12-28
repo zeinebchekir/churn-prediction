@@ -1,0 +1,21 @@
+# Étape 1 : Utiliser Node.js
+FROM node:22
+
+# Étape 2 : Définir le dossier de travail
+WORKDIR /app
+
+# Étape 3 : Copier les fichiers et installer les dépendances
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Étape 4 : Copier le code source
+COPY . .
+
+ENV MONGO_URI=mongodb://mongo-db:27017/userDB
+# Copie le script PowerShell
+ENV SERVICE_URI=users-services:50053
+EXPOSE 50053
+# Lancer le script d'attente avant de démarrer NestJS
+CMD ["npm", "run", "start:dev"]
+# Étape 5 : Exposer le port et lancer l'application
+

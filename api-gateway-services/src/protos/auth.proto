@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+    rpc GetAllUsers (GetAllUsersRequest) returns (emptyresponse);
+    rpc updateUser(updateUserRequest)returns (emptyresponse);
+    rpc GetUser (GetOneUserRequest) returns (GetOneUserResponse);
+    rpc addUser (addUserRequest) returns (CreateUserResponse);
+    rpc deleteUser (DeleteUserRequest) returns (DeleteUserResponse);
+    rpc assignRole(roleRequest) returns (emptyresponse);
+    rpc login(login) returns (loginResponse);
+    rpc GetUserByEmail (GetUserByEmailRequest) returns (GetUserByEmailResponse);
+
+}
+
+message addUserRequest{
+    User user=1;
+    string token=2;
+}
+message loginResponse{
+    string token=1;  
+}
+
+message login{
+    string username=1;
+    string password=2;
+}
+
+message roleRequest{
+    string id=1;
+    string role=2;
+    string token=3;
+}
+message updateUserRequest{
+    string id=1;
+    User user=2;
+}
+message emptyresponse{} 
+// Requête pour récupérer tous les utilisateurs (ajoutée)
+message GetAllUsersRequest {}
+
+// Requête pour récupérer un utilisateur
+message GetOneUserRequest {
+    int32 id = 1;
+}
+
+// Réponse pour un utilisateur
+message GetOneUserResponse {
+    int32 id = 1;
+    string nom = 2;
+    string prenom = 3;
+    string email = 4;
+    string mdp = 5;
+    string adresse = 6;
+    string numTel = 7;
+}
+
+// Requête pour créer un utilisateur
+message User {
+    int32 numIdentite = 1;
+    string nom = 2;
+    string prenom = 3;
+    string email = 4;
+    string mdp = 5;
+    string adresse = 6;
+    int32 numTel = 7;
+    string role=8;
+}
+
+// Réponse après création
+message CreateUserResponse {
+    string id=1;
+}
+
+// Requête pour supprimer un utilisateur
+message DeleteUserRequest {
+    string id = 1;
+    string token=2;
+}
+
+// Réponse après suppression
+message DeleteUserResponse {
+     string status = 1;  // Nouveau champ pour le statut
+  string message = 2;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+  string token = 2;
+}
+
+message GetUserByEmailResponse {
+  string id = 1;
+}
