@@ -1,0 +1,11 @@
+[core]
+    remote = storageaws
+['remote "storage"']
+    url = s3://telecom
+    region = us-east-1
+    secret_access_key = rjqGHubMjIPVza/eH+0NhISjS+vzzNYXggr6IQ40
+['remote "storageaws"']
+    url = s3://churn-client-project
+    access_key_id = ASIA2JBGQTPQWSHENLJO
+    region = us-east-1
+    secret_access_key = rjqGHubMjIPVza/eH+0NhISjS+vzzNYXggr6IQ40

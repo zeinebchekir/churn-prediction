@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-
+/flask_prediction_churn/Data4_modified.csv
 # Logs
 logs
 *.log
