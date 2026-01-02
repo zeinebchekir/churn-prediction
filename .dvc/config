@@ -1,7 +1,0 @@
-[core]
-    remote = storageaws
-['remote "storageaws"']
-    url = s3://churn-client-project
-    access_key_id = ASIA2JBGQTPQWSHENLJO
-    region = us-east-1
-    secret_access_key = rjqGHubMjIPVza/eH+0NhISjS+vzzNYXggr6IQ40
