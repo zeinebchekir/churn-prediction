@@ -1,3 +1,5 @@
 /Data4_modified.csv
 /.venv
 .dvc/config
+.env
+docker-compose.yml

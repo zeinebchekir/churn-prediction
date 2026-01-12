@@ -15,7 +15,7 @@ import yaml
 
 mlflow.set_tracking_uri("http://localhost:5001")
 mlflow.set_experiment("churn_random_forest")
-df=pd.read_csv('Data4_modified.csv')
+df=pd.read_csv('flask_prediction_churn/Data4_modified.csv')
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Train churn model with MLflow")
@@ -35,12 +35,14 @@ max_depth = args.max_depth
 sampler = args.sampler
 test_size = args.test_size
 
-with open("Data4_modified.csv.dvc", "r") as f:
+
+
+with open("flask_prediction_churn/Data4_modified.csv.dvc", "r") as f:
     dvc_meta = yaml.safe_load(f)
 
 # Le hash est dans dvc_meta['outs'][0]['hash']
-dvc_hash = dvc_meta['outs'][0]['hash']
-print("DVC hash:", dvc_hash)
+dataset_hash = dvc_meta['outs'][0]['md5']
+print("DVC hash:", dataset_hash)
 
 
 # import matplotlib.pyplot as plt
@@ -54,7 +56,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_ad, y_ad, test_size=0.2, r
 
 if args.run_name == "auto":
     timestamp = datetime.now().strftime("%Y%m%d-%H%M")
-    run_name = f"RF_{sampler}_ne{n_estimators}_md{max_depth}_ds{dvc_hash}_{timestamp}"
+    run_name = f"RF_{sampler}_ne{n_estimators}_md{max_depth}_ds{dataset_hash}_{timestamp}"
 else: 
     run_name = args.run_name
 with mlflow.start_run(run_name=run_name):
@@ -64,9 +66,9 @@ with mlflow.start_run(run_name=run_name):
         "max_depth": max_depth,
         "sampler": sampler,
         "test_size": test_size,
-        "dataset_hash": dvc_hash
+        "dataset_hash": dataset_hash
     })
-    mlflow.log_param("dataset_hash", dvc_hash)
+    mlflow.log_param("dataset_hash", dataset_hash)
 # Initialize and train the Random Forest Classifier
     rf_model = RandomForestClassifier(n_estimators=n_estimators,max_depth=max_depth, random_state=42)  # You can adjust n_estimators
     rf_model.fit(X_train, y_train)
@@ -127,6 +129,6 @@ with mlflow.start_run(run_name=run_name):
         artifact_path="model",
         registered_model_name="ChurnRandomForest"
     )
-    mlflow.log_artifact("Data4_modified.csv", artifact_path="dataset")
+    mlflow.log_artifact("flask_prediction_churn/Data4_modified.csv", artifact_path="dataset")
 
     pickle.dump(rf_model,open("model.pkl","wb"))
