@@ -1,12 +1,18 @@
-name: Deploy to AWS EC2
+name: Deploy Churn Service
 
 on:
   push:
     branches: [ "main" ]
+    # Changement 1 : On ne déclenche que si ce dossier change
+    paths:
+      - 'flask_prediction_churn/**'
+      - '.github/workflows/deploy.yml'
 
 env:
-  # Remplacez 'votre-nom-utilisateur' par votre pseudo GitHub (tout en minuscules !)
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/mlops-projet:latest
+  # On donne un nom spécifique à cette image
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/churn-service:latest
+  # Le nom du dossier exact
+  SERVICE_PATH: ./flask_prediction_churn
 
 jobs:
   build-and-deploy:
@@ -16,11 +22,9 @@ jobs:
       packages: write
 
     steps:
-    # 1. Récupérer le code
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 2. Se connecter au registre GitHub (GHCR)
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v3
       with:
@@ -28,15 +32,15 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
-    # 3. Construire et Pousser l'image
+    # Changement 2 : On construit depuis le sous-dossier
     - name: Build and Push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: .
+        # C'est ici qu'on dit "entre dans le dossier avant de build"
+        context: ${{ env.SERVICE_PATH }}
         push: true
         tags: ${{ env.IMAGE_NAME }}
 
-    # 4. Déployer sur AWS EC2
     - name: Deploy to EC2
       uses: appleboy/ssh-action@master
       with:
@@ -44,15 +48,16 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          # Se connecter au registre GitHub depuis le serveur
+          # Login
           echo ${{ secrets.GH_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           
-          # Arrêter l'ancien conteneur
-          docker stop api_flask || true
-          docker rm api_flask || true
+          # Arrêter uniquement le service de churn
+          docker stop churn_service || true
+          docker rm churn_service || true
           
-          # Télécharger la nouvelle image
+          # Pull la nouvelle image
           docker pull ${{ env.IMAGE_NAME }}
           
-          # Lancer le nouveau conteneur
-          docker run -d -p 5000:5000 --name api_flask ${{ env.IMAGE_NAME }}
+          # Lancer (Port 5000)
+          # Note: Si vous avez d'autres services, assurez-vous que le port 5000 est libre
+          docker run -d -p 5000:5000 --name churn_service ${{ env.IMAGE_NAME }}
