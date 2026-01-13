@@ -2,7 +2,7 @@ name: Deploy Churn Service
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
     # Changement 1 : On ne déclenche que si ce dossier change
     paths:
       - 'flask_prediction_churn/**'
