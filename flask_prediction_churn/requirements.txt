@@ -12,3 +12,7 @@ pandas==2.3.3
 matplotlib==3.10.8
 zenml==0.93.0
 imbalanced-learn== 0.14.1
+uvicorn == 0.40.0
+optuna == 4.6.0
+matplotlib  == 3.10.8
+imbalanced-learn ==  0.14.1

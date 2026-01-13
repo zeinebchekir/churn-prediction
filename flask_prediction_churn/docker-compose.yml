@@ -4,7 +4,6 @@ services:
     container_name: mlflow
     working_dir: /mlflow
     environment:
-      # AWS credentials pour S3
      
     command: >
       mlflow server
